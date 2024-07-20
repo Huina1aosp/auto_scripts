@@ -12,8 +12,8 @@ echo
 
 set -e
 
-mkdir crdroid
-cd crdroid
+git clone https://github.com/Huina1aosp/crDroid_gsi
+cd crDroid_gsi
 
 initRepos() {
     if [ ! -d .repo ]; then
