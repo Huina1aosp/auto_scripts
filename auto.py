@@ -20,16 +20,16 @@ initRepos() {
         echo "--> Initializing workspace"
         repo init -u https://github.com/crdroidandroid/android.git -b 14.0
         echo
-        git clone https://github.com/naz664/treble_manifest.git .repo/local_manifests  -b 14
-        echo "--> Preparing local manifest"
         
+        echo "--> Preparing local manifest..."
+	 git clone https://github.com/naz664/treble_manifest.git .repo/local_manifests  -b 14
         echo
     fi
 }
 
 syncRepos() {
     echo "--> Syncing repos"
-    repo sync -c --force-sync --no-clone-bundle --no-tags -j$2
+    repo sync -c --force-sync --no-clone-bundle --no-tags -j$(nproc --all)
     echo
 }
 
@@ -39,11 +39,20 @@ applyPatches() {
     echo
 }
 
+genrommk() {
+    echo "--> generate rom make file"
+	cd device/phh/treble
+	bash generate.sh crDroid
+    echo
+}
+
+
 START=$(date +%s)
 
 initRepos
 syncRepos
 applyPatches
+genrommk
 
 END=$(date +%s)
 ELAPSEDM=$(($(($END-$START))/60))
