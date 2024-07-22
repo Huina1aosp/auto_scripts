@@ -29,7 +29,7 @@ initRepos() {
 
 syncRepos() {
     echo "--> Syncing repos"
-    repo sync -c --force-sync --no-clone-bundle --no-tags -j$(nproc --all)
+    repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags --optimized-fetch --prune
     echo
 }
 
@@ -46,6 +46,16 @@ genrommk() {
     echo
 }
 
+compile() {
+	echo "--> compilation..."
+	. build/envsetup.sh
+	ccache -M 1G 
+	lunch treble_arm64_bgN-userdebug 
+	make systemimage -j$(nproc --all)
+	echo
+}
+
+
 
 START=$(date +%s)
 
@@ -53,11 +63,16 @@ initRepos
 syncRepos
 applyPatches
 genrommk
+compile
 
 END=$(date +%s)
 ELAPSEDM=$(($(($END-$START))/60))
 ELAPSEDS=$(($(($END-$START))-$ELAPSEDM*60))
 
 echo "--> Buildbot completed in $ELAPSEDM minutes and $ELAPSEDS seconds"
-echo""")
+echo
+import os
+impert system
+os.system(bash gsidown.sh)
+os.system""")
 print('now excute gsidown.sh')
