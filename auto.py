@@ -15,6 +15,13 @@ set -e
 git clone https://github.com/Huina1aosp/crDroid_gsi
 cd crDroid_gsi
 
+pkg() {
+        echo "--> downloading pkg..."
+        sudo apt-get install git-core gnupg flex bison build-essential zip curl zlib1g-dev libc6-dev-i386 x11proto-core-dev libx11-dev lib32z1-dev libgl1-mesa-dev libxml2-utils xsltproc unzip fontconfig
+        echo
+}
+
+
 initRepos() {
     if [ ! -d .repo ]; then
         echo "--> Initializing workspace"
@@ -24,7 +31,7 @@ initRepos() {
         echo "--> Preparing local manifest..."
 	 git clone https://github.com/naz664/treble_manifest.git .repo/local_manifests  -b 14
         echo
-    fi
+     fi
 }
 
 syncRepos() {
@@ -59,6 +66,7 @@ compile() {
 
 START=$(date +%s)
 
+pkg
 initRepos
 syncRepos
 applyPatches
