@@ -50,31 +50,90 @@ applyPatches() {
 }
 
 genrommk() {
-    echo "--> generate rom make file"
-	cd device/phh/treble
-	bash generate.sh crDroid
+echo "--> Generating makefiles"
+    cd device/phh/treble
+    cp $BL/patches/aosp.mk .
+    bash generate.sh aosp
+    cd ../../..
     echo
 }
 
-compile() {
-	echo "--> compilation..."
-	. build/envsetup.sh
-	ccache -M 1G 
-	lunch treble_arm64_bgN-userdebug 
-	make systemimage -j$(nproc --all)
-	echo
+setupEnv() {
+    echo "--> Setting up build environment"
+    source build/envsetup.sh &>/dev/null
+    ccache-M 1G
+    mkdir -p $BD
+    echo
 }
 
+buildTrebleApp() {
+    echo "--> Building treble_app"
+    cd treble_app
+    bash build.sh release
+    cp TrebleApp.apk ../vendor/hardware_overlay/TrebleApp/app.apk
+    cd ..
+    echo
+}
 
+buildVariant() {
+    echo "--> Building $1"
+    lunch "$1"-ap2a-userdebug
+    make -j$(nproc --all) installclean
+    make -j$(nproc --all) systemimage
+    make -j$(nproc --all) target-files-package otatools
+    bash $BL/sign.sh "vendor/ponces-priv/keys" $OUT/signed-target_files.zip
+    unzip -jo $OUT/signed-target_files.zip IMAGES/system.img -d $OUT
+    mv $OUT/system.img $BD/system-"$1".img
+    echo
+}
+
+buildVndkliteVariant() {
+    echo "--> Building $1-vndklite"
+    [[ "$1" == *"a64"* ]] && arch="32" || arch="64"
+    cd treble_adapter
+    sudo bash lite-adapter.sh "$arch" $BD/system-"$1".img
+    mv s.img $BD/system-"$1"-vndklite.img
+    sudo rm -rf d tmp
+    cd ..
+    echo
+}
+
+buildVariants() {
+    buildVariant treble_a64_bvN
+    buildVariant treble_a64_bgN
+    buildVariant treble_arm64_bvN
+    buildVariant treble_arm64_bgN
+    buildVndkliteVariant treble_a64_bvN
+    buildVndkliteVariant treble_a64_bgN
+    buildVndkliteVariant treble_arm64_bvN
+    buildVndkliteVariant treble_arm64_bgN
+}
+
+generatePackages() {
+    echo "--> Generating packages"
+    buildDate="$(date +%Y%m%d)"
+    find $BD/ -name "system-treble_*.img" | while read file; do
+        filename="$(basename $file)"
+        [[ "$filename" == *"_a64"* ]] && arch="arm32_binder64" || arch="arm64"
+        [[ "$filename" == *"_bvN"* ]] && variant="vanilla" || variant="gapps"
+        [[ "$filename" == *"-vndklite"* ]] && vndk="-vndklite" || vndk=""
+        name="aosp-${arch}-ab-${variant}${vndk}-14.0-$buildDate"
+        xz -cv "$file" -T0 > $BD/"$name".img.xz
+    done
+    rm -rf $BD/system-*.img
+    echo
+}
 
 START=$(date +%s)
 
-pkg
 initRepos
 syncRepos
 applyPatches
 genrommk
-compile
+setupEnv
+buildTrebleApp
+[ ! -z "$BV" ] && buildVariant "$BV" || buildVariants
+generatePackages
 
 END=$(date +%s)
 ELAPSEDM=$(($(($END-$START))/60))
