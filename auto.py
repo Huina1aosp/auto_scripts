@@ -17,7 +17,7 @@ cd crDroid_gsi
 
 pkg() {
         echo "--> downloading pkg..."
-        sudo apt-get install git-core gnupg flex bison build-essential zip curl zlib1g-dev libc6-dev-i386 x11proto-core-dev libx11-dev lib32z1-dev libgl1-mesa-dev libxml2-utils xsltproc unzip fontconfig
+        sudo apt-get install ccache git-core gnupg flex bison build-essential zip curl zlib1g-dev libc6-dev-i386 x11proto-core-dev libx11-dev lib32z1-dev libgl1-mesa-dev libxml2-utils xsltproc unzip fontconfig
         echo
 }
 
@@ -25,18 +25,21 @@ pkg() {
 initRepos() {
     if [ ! -d .repo ]; then
         echo "--> Initializing workspace"
-        repo init -u https://github.com/crdroidandroid/android.git -b 14.0
+        repo init -u https://android.googlesource.com/platform/manifest -b android-14.0.0_r54 --git-lfs
         echo
         
         echo "--> Preparing local manifest..."
-	 git clone https://github.com/naz664/treble_manifest.git .repo/local_manifests  -b 14
+        echo
+	 mkdir -p .repo/local_manifests
+    cp $BL/build/default.xml .repo/local_manifests/default.xml
+    cp $BL/build/remove.xml .repo/local_manifests/remove.xml
         echo
      fi
 }
 
 syncRepos() {
     echo "--> Syncing repos"
-    repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags --optimized-fetch --prune
+    repo sync
     echo
 }
 
