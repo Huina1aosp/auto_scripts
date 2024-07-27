@@ -31,8 +31,8 @@ initRepos() {
         echo "--> Preparing local manifest..."
         echo
 	 mkdir -p .repo/local_manifests
-    cp $BL/build/default.xml .repo/local_manifests/default.xml
-    cp $BL/build/remove.xml .repo/local_manifests/remove.xml
+    cp $BL/patches/default.xml .repo/local_manifests/default.xml
+    cp $BL/patches/remove.xml .repo/local_manifests/remove.xml
         echo
      fi
 }
