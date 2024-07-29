@@ -11,6 +11,7 @@ echo "--------------------------------------"
 echo
 
 set -e
+BL=$PWD/patches
 
 git clone https://github.com/Huina1aosp/crDroid_gsi
 cd crDroid_gsi
