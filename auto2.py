@@ -48,6 +48,22 @@ applyPatches() {
     echo
 }
 
+generation() {
+             echo "generation mk..."
+             cd device/phh/treble
+             bash generate.sh crDroid
+             echo
+}
+
+compile{
+       echo "compile..."
+       . build/envsetup.sh
+       ccache -M 1G -F 0
+       lunch treble_arm64_bgN-userdebug 
+       make systemimage
+       echo
+}
+
 START=$(date +%s)
 
 git
@@ -55,6 +71,8 @@ pkg
 initRepo
 sync
 applyPatches
+generation
+compile
 
 END=$(date +%s)
 ELAPSEDM=$(($(($END-$START))/60))
