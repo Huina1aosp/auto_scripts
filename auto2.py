@@ -5,4 +5,3 @@ set -e
 BP=$PWD/crdroid/patches
 BY=$PWD/crdroid/
 
-initrepo()
