@@ -75,3 +75,4 @@ ELAPSEDS=$(($(($END-$START))-$ELAPSEDM*60))
 
 echo "--> Buildbot completed in $ELAPSEDM minutes and $ELAPSEDS seconds"
 echo""")
+print('please set you're git config')
