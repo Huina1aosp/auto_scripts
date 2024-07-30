@@ -11,7 +11,9 @@ echo "--------------------------------------"
 echo
 
 set -e
-BL=$PWD/patches
+BL=$PWD/patches 
+BD=$HOME/builds
+BV=$1
 
 git clone https://github.com/Huina1aosp/crDroid_gsi
 cd crDroid_gsi
@@ -31,9 +33,9 @@ initRepos() {
         
         echo "--> Preparing local manifest..."
         echo
-	 mkdir -p .repo/local_manifests
-    cp $BL/patches/default.xml .repo/local_manifests/default.xml
-    cp $BL/patches/remove.xml .repo/local_manifests/remove.xml
+         mkdir -p .repo/local_manifests
+    cp $BL/default.xml .repo/local_manifests/default.xml
+    cp $BL/remove.xml .repo/local_manifests/remove.xml
         echo
      fi
 }
@@ -46,14 +48,14 @@ syncRepos() {
 
 applyPatches() {
     echo "--> Applying patches"
-       bash patches/apply-patches.sh .
+       bash $BL/apply-patches.sh .
     echo
 }
 
 genrommk() {
 echo "--> Generating makefiles"
     cd device/phh/treble
-    cp $BL/patches/aosp.mk .
+    cp $BL/aosp.mk .
     bash generate.sh aosp
     cd ../../..
     echo
@@ -88,27 +90,9 @@ buildVariant() {
     echo
 }
 
-buildVndkliteVariant() {
-    echo "--> Building $1-vndklite"
-    [[ "$1" == *"a64"* ]] && arch="32" || arch="64"
-    cd treble_adapter
-    sudo bash lite-adapter.sh "$arch" $BD/system-"$1".img
-    mv s.img $BD/system-"$1"-vndklite.img
-    sudo rm -rf d tmp
-    cd ..
-    echo
-}
 
 buildVariants() {
-    buildVariant treble_a64_bvN
-    buildVariant treble_a64_bgN
-    buildVariant treble_arm64_bvN
     buildVariant treble_arm64_bgN
-    buildVndkliteVariant treble_a64_bvN
-    buildVndkliteVariant treble_a64_bgN
-    buildVndkliteVariant treble_arm64_bvN
-    buildVndkliteVariant treble_arm64_bgN
-}
 
 generatePackages() {
     echo "--> Generating packages"
