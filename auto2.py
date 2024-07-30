@@ -62,7 +62,6 @@ compile() {
 
 START=$(date +%s)
 
-git
 pkg
 initRepo
 sync
