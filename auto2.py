@@ -8,8 +8,12 @@ set -e
 BP=$PWD/patches
 BY=$PWD/
 
-       git clone https://Huina1aosp/GSI_BUILD
+git() {
+       echo "---> git cloning..."
+       git clone https://github.com/Huina1aosp/GSI_BUILD
        cd GSI_BUILD
+       echo
+}
 
 
 pkg() {
@@ -76,5 +80,3 @@ ELAPSEDS=$(($(($END-$START))-$ELAPSEDM*60))
 
 echo "--> Buildbot completed in $ELAPSEDM minutes and $ELAPSEDS seconds"
 echo""")
-
-
