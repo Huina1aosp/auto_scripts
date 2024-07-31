@@ -8,12 +8,8 @@ set -e
 BP=$PWD/patches
 BY=$PWD/
 
-git() {
-       echo "---> git cloning..."
        git clone https://Huina1aosp/GSI_BUILD
        cd GSI_BUILD
-       echo
-}
 
 
 pkg() {
@@ -55,7 +51,7 @@ generation() {
              echo
 }
 
-compile{
+compile() {
        echo "compile..."
        . build/envsetup.sh
        ccache -M 1G -F 0
