@@ -8,8 +8,8 @@ set -e
 BP=$PWD/patches
 BY=$PWD/
 
-       git clone https://github.com/Huina1aosp/GSI_BUILD
-       cd GSI_BUILD
+git clone https://github.com/Huina1aosp/GSI_BUILD
+cd GSI_BUILD
 
 
 pkg() {
