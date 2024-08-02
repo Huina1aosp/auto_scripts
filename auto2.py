@@ -20,7 +20,7 @@ pkg() {
 
 initRepo() {
             echo "---> init repo..."
-               repo init -u https://github.com/crdroidandroid/android.git -b 14.0 -c --depth=1 --no-tags --no-clone-bundle --no-use-superproject
+               repo init -u https://github.com/crdroidandroid/android.git -b 14.0 -c --depth=1 --no-tags --no-clone-bundle
             echo
 }
 
@@ -34,7 +34,7 @@ XML() {
 
 sync() {
        echo "--> Syncing...."
-       repo sync -j4 -c -q --no-clone-bundle --no-tags --no-use-superproject --optimized-fetch --retry-fetches=15  --prune --no-auto-gc --force-remove-dirty 
+       repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags --optimized-fetch --prune
        echo
 }
 
