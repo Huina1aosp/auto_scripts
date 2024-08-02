@@ -20,12 +20,13 @@ pkg() {
 
 initRepo() {
             echo "---> init repo..."
-               repo init -u https://github.com/crdroidandroid/android.git -b 14.0 -c --depth=1 --no-tags --no-clone-bundle
+               repo init -u https://github.com/crdroidandroid/android.git-b 14.0 -c --depth=1 --no-tags --no-clone-bundle
             echo
 }
 
 XML() {
       echo "--> Preparing XML..."
+      mkdir .repo/local_manifests
       cp $BP/gapps.xml .repo/local_manifests
       cp $BP/manifest.xml .repo/local_manifests
 
