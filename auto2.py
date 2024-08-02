@@ -20,7 +20,7 @@ pkg() {
 
 initRepo() {
             echo "---> init repo..."
-            repo init -u https://github.com/crdroidandroid/android.git-b 14.0
+               repo init -u https://github.com/crdroidandroid/android.git -b 14.0 -c --depth=1 --no-tags --no-clone-bundle
             echo
 }
 
