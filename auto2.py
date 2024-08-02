@@ -3,11 +3,11 @@ file.write("""#!/bin/bash
 
 echo "build bot by supers"
 
-set -e 
-bd="$PWD/patches"
-
+set -e
 git clone https://github.com/Huina1aosp/GSI_BUILD
 cd GSI_BUILD
+bd="$PWD/MK,XML"
+bh="$PWD/"
 
 
 pkg() {
@@ -18,22 +18,22 @@ pkg() {
 
 initRepo() {
             echo "---> init repo..."
-               repo init -u https://github.com/crdroidandroid/android.git-b 14.0 -c --depth=1 --no-tags --no-clone-bundle
+               repo init -u https://github.com/crdroidandroid/android.git -b 14.0 -c --depth=1 --no-tags --no-clone-bundle
             echo
 }
 
 XML() {
       echo "--> Preparing XML..."
-      mkdir .repo/local_manifests
-      cp ${bd}/gapps.xml .repo/local_manifests
-      cp ${bd}/manifest.xml .repo/local_manifests
+      mkdir ${bh}.repo/local_manifests
+      cp ${bd}/gapps.xml ${bh}.repo/local_manifests
+      cp ${bd}/manifest.xml ${bh}.repo/local_manifests
 
       echo
 }
 
 sync() {
        echo "--> Syncing...."
-       repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags --optimized-fetch --prune
+       repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags --optimized-fetch --prune --retry-fetches=15 --force-remove-dirty
        echo
 }
 
@@ -54,7 +54,7 @@ compile() {
        echo "compile..."
        . build/envsetup.sh
        ccache -M 1G -F 0
-       lunch treble_arm64_bgN-userdebug 
+       lunch treble_arm64_bgN-userdebug
        make systemimage
        echo
 }
@@ -63,6 +63,7 @@ START=$(date +%s)
 
 pkg
 initRepo
+XML
 sync
 applyPatches
 generation
