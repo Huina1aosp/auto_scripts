@@ -4,9 +4,7 @@ file.write("""#!/bin/bash
 echo "build bot by supers"
 
 set -e 
-
-BP=$PWD/patches
-BY=$PWD/
+bd="$PWD/patches"
 
 git clone https://github.com/Huina1aosp/GSI_BUILD
 cd GSI_BUILD
@@ -20,15 +18,15 @@ pkg() {
 
 initRepo() {
             echo "---> init repo..."
-               repo init -u https://github.com/crdroidandroid/android.git -b 14.0 -c --depth=1 --no-tags --no-clone-bundle
+               repo init -u https://github.com/crdroidandroid/android.git-b 14.0 -c --depth=1 --no-tags --no-clone-bundle
             echo
 }
 
 XML() {
       echo "--> Preparing XML..."
       mkdir .repo/local_manifests
-      cp $BP/gapps.xml .repo/local_manifests
-      cp $BP/manifest.xml .repo/local_manifests
+      cp ${bd}/gapps.xml .repo/local_manifests
+      cp ${bd}/manifest.xml .repo/local_manifests
 
       echo
 }
