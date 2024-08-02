@@ -33,7 +33,7 @@ XML() {
 
 sync() {
        echo "--> Syncing...."
-       repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags --optimized-fetch --prune --retry-fetches=15 --force-remove-dirty
+       repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags --optimized-fetch --prune --retry-fetches=15
        echo
 }
 
