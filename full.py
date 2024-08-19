@@ -1,8 +1,11 @@
 #scripts by huina
 import os
-cmds = 'https://github.com/Huina1aosp/auto_scripts'
-dow = int(input('''do you want download scripts?
-            1 = download
-            2 = exit '''))
-if  dow == 1:
-    os.system(cmds)
+os.system ("sudo apt install ")
+yesn = input("Do you want to continue? (yes/no): ")
+if yesn.lower() in ["yes", "y"]:
+    print("Continuing...")
+            echo "--> download requirement files..."
+            
+else:
+    print("Exiting...")
+            
