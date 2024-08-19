@@ -1,11 +1,11 @@
 #scripts by huina
 import os
-os.system ("sudo apt install ")
 yesn = input("Do you want to continue? (yes/no): ")
 if yesn.lower() in ["yes", "y"]:
     print("Continuing...")
             echo "--> download requirement files..."
-            
+            os.system ("git clone https://github.com/Huina1aosp/GSI_BUILD")
+            os.system ("cd GSI_BUILD")
 else:
     print("Exiting...")
             
